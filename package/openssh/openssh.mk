@@ -2,7 +2,10 @@ openssh/VERSION := V_8_5_P1
 openssh/TARBALL := https://github.com/openssh/openssh-portable/archive/refs/tags/$(openssh/VERSION).tar.gz
 openssh/DEPENDS := zlib openssl
 
-openssh/dir = $(build_dir)/openssh/openssh-portable-$(openssh/VERSION)
+openssh/dir := $(build_dir)/openssh/openssh-portable-$(openssh/VERSION)
+openssh/bin := $(bin_dir)/openssh-$(openssh/VERSION).tgz
+openssh/binfiles := sbin/sshd libexec/sftp-server
+openssh/conffiles := etc/sshd_config
 
 define openssh/build :=
 	cd $(openssh/dir) && \
@@ -15,4 +18,9 @@ endef
 
 define openssh/install :=
 	+'$(MAKE)' -C '$(openssh/dir)' install-nokeys DESTDIR='$(staging_dir)'
+endef
+
+define openssh/package :=
+	cd '$(staging_dir)/$(prefix)' && echo $(openssh/binfiles) | xargs -n1 $(host_triplet)-strip -s && \
+	tar -czf $(openssh/bin) --transform 's ^ $(prefix)/ ' $(openssh/binfiles) $(openssh/conffiles)
 endef

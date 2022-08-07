@@ -4,6 +4,7 @@ staging_dir := $(top_dir)/staging_dir
 build_dir := $(top_dir)/build_dir
 state_dir := $(top_dir)/state_dir
 dl_dir := $(top_dir)/dl
+bin_dir := $(top_dir)/bin
 
 toolchain := /opt/local/armv7-eabihf--musl--stable-2021.11-1
 host_triplet := arm-buildroot-linux-musleabihf
@@ -35,7 +36,8 @@ endef
 # Dynamically declare dependencies between packages
 #############################################
 define declaredeps =
-$(eval $1: $(call depends,$1,install))
+$(eval $1: $(call depends,$1,package))
+$(eval $(call depends,$1,package) : $(call depends,$1,install) ; $(call packagepkg,$1) )
 $(eval $(call depends,$1,install) : $(call depends,$1,build)   ; $(call installpkg,$1) )
 $(eval $(call depends,$1,build)   : $(call depends,$1,prepare) ; $(call buildpkg,$1)   )
 $(eval $(call depends,$1,prepare) : $(call depends,$1,download); $(call preparepkg,$1) )
@@ -72,6 +74,12 @@ endef
 define installpkg =
 	$(call $1/install)
 	$(call depfile,$1,install)
+endef
+
+define packagepkg =
+	mkdir -p '$(bin_dir)'
+	$(call $1/package)
+	$(call depfile,$1,package)
 endef
 
 #############################################
