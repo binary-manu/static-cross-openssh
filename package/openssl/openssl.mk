@@ -1,4 +1,4 @@
-openssl/VERSION := 1.1.1k
+openssl/VERSION := 1.1.1q
 openssl/TARBALL := https://www.openssl.org/source/openssl-$(openssl/VERSION).tar.gz
 
 openssl/dir = $(build_dir)/openssl/openssl-$(openssl/VERSION)
