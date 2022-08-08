@@ -40,18 +40,28 @@ define declareonce =
 $(if $($1_done),,$(call declaredeps,$1) $(eval $1_done=1))
 endef
 
+.SHELLFLAGS = -e -c
+.ONESHELL:
+
 #############################################
 # Macros for specific stages
 #############################################
 define downloadpkg =
 	mkdir -p '$(dl_dir)'
-	cd '$(dl_dir)' && { [ -n '$($1/TARBALL)' -a ! -f '$(top_dir)/$(call depends,$1,download)' ] || exit 0; } && wget --quiet '$($1/TARBALL)'
+	cd '$(dl_dir)'
+	if [ -n '$($1/TARBALL)' ] && \
+			[ ! -f '$(top_dir)/$(call depends,$1,download)' ]; then
+		wget --quiet '$($1/TARBALL)'
+	fi
 	$(call depfile,$1,download)
 endef
 
 define preparepkg =
 	mkdir -p '$(build_dir)/$1'
-	cd '$(build_dir)/$1' && { [ -n '$($1/TARBALL)' ] || exit 0; } && tar -xf '$(dl_dir)/$(notdir $($1/TARBALL))'
+	cd '$(build_dir)/$1'
+	if [ -n '$($1/TARBALL)' ]; then
+		tar -xf '$(dl_dir)/$(notdir $($1/TARBALL))'
+	fi
 	$(call depfile,$1,prepare)
 endef
 

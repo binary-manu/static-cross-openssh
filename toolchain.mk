@@ -4,18 +4,24 @@ toolchain_url := https://toolchains.bootlin.com/downloads/releases/toolchains/$(
 toolchain_file := $(notdir $(toolchain_url))
 
 .PHONY: all
+.SHELLFLAGS = -e -c
+.ONESHELL:
 
 include functions.mk
 
 define download =
 	mkdir -p '$(dl_dir)'
-	cd '$(dl_dir)' && { [ ! -f '$(top_dir)/$(call depends,$1,download)' ] || exit 0; } && wget --quiet '$(toolchain_url)'
+	cd '$(dl_dir)'
+	if [ ! -f '$(top_dir)/$(call depends,toolchain,download)' ]; then
+		wget --quiet '$(toolchain_url)'
+	fi
 	$(call depfile,toolchain,download)
 endef
 
 define prepare =
 	mkdir -p '$(toolchain_dir)'
-	cd '$(toolchain_dir)' && tar -xf '$(dl_dir)/$(toolchain_file)'
+	cd '$(toolchain_dir)'
+	tar -xf '$(dl_dir)/$(toolchain_file)'
 	$(call depfile,toolchain,prepare)
 endef
 

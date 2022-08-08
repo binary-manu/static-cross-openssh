@@ -8,12 +8,12 @@ openssh/binfiles := sbin/sshd libexec/sftp-server
 openssh/conffiles := etc/sshd_config
 
 define openssh/build :=
-	cd $(openssh/dir) && \
-  env PATH='$(host_path)' autoreconf -i && \
+	cd $(openssh/dir)
+	env PATH='$(host_path)' autoreconf -i
 	./configure LDFLAGS="-static $(LDFLAGS)" LIBS="-lpthread" \
 		--prefix="$(prefix)" --host="$(host_triplet)" --disable-strip \
 		--with-privsep-user=root --with-privsep-path=$(prefix)/var/empty
-	+'$(MAKE)' -C '$(openssh/dir)'
+	+'$(MAKE)'
 endef
 
 define openssh/install :=
@@ -21,6 +21,8 @@ define openssh/install :=
 endef
 
 define openssh/package :=
-	cd '$(staging_dir)/$(prefix)' && echo $(openssh/binfiles) | xargs -n1 $(host_triplet)-strip -s && \
-	tar -czf $(openssh/bin) --transform 's ^ $(prefix)/ ' $(openssh/binfiles) $(openssh/conffiles)
+	cd '$(staging_dir)/$(prefix)'
+	echo $(openssh/binfiles) | xargs -n1 $(host_triplet)-strip -s
+	tar -czf $(openssh/bin) --transform 's ^ $(prefix)/ ' \
+		$(openssh/binfiles) $(openssh/conffiles)
 endef
