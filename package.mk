@@ -52,7 +52,7 @@ define downloadpkg =
 	mkdir -p '$(dl_dir)'
 	cd '$(dl_dir)'
 	if [ -n '$($1/TARBALL)' ]; then
-		wget -r '$($1/TARBALL)'
+		wget '$($1/TARBALL)' -O- > '$(dl_dir)/$(notdir $($1/TARBALL))'
 	fi
 	$(call depfile,$1,download)
 endef

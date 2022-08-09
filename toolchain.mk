@@ -2,8 +2,8 @@ ARCH ?= armv7-eabihf
 
 dl_dir := $(dl_dir)/toolchain
 state_dir := $(state_dir)/toolchain
-toolchain_url := https://toolchains.bootlin.com/downloads/releases/toolchains/$(ARCH)/tarballs/$(ARCH)--musl--stable-2021.11-1.tar.bz2
-toolchain_file := $(notdir $(toolchain_url))
+toolchain_url := https://toolchains.bootlin.com/downloads/releases/toolchains/$(ARCH)/tarballs/$(ARCH)--musl--stable-2021.11-%d.tar.bz2
+toolchain_file := toolchain-$(ARCH).tar.bz2
 
 .PHONY: all
 .SHELLFLAGS = -e -c
@@ -14,7 +14,12 @@ include functions.mk
 define download =
 	mkdir -p '$(dl_dir)'
 	cd '$(dl_dir)'
-	wget -r '$(toolchain_url)'
+	# The last date component can changes, we may not have a .1, so try up to 32
+	for i in $$(seq 32); do
+		err=0
+		wget  "$$(printf '$(toolchain_url)' $$i)" -O- > '$(dl_dir)/$(toolchain_file)' || err=$$?
+		[ $$err -eq 8 ] && continue || [ $$err -eq 0 ] && break
+	done
 	$(call depfile,toolchain,download)
 endef
 
