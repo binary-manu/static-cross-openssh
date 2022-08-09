@@ -1,5 +1,7 @@
 ARCH ?= armv7-eabihf
 
+dl_dir := $(dl_dir)/toolchain
+state_dir := $(state_dir)/toolchain
 toolchain_url := https://toolchains.bootlin.com/downloads/releases/toolchains/$(ARCH)/tarballs/$(ARCH)--musl--stable-2021.11-1.tar.bz2
 toolchain_file := $(notdir $(toolchain_url))
 
@@ -12,9 +14,7 @@ include functions.mk
 define download =
 	mkdir -p '$(dl_dir)'
 	cd '$(dl_dir)'
-	if [ ! -f '$(top_dir)/$(call depends,toolchain,download)' ]; then
-		wget --quiet '$(toolchain_url)'
-	fi
+	wget -r '$(toolchain_url)'
 	$(call depfile,toolchain,download)
 endef
 
@@ -29,6 +29,13 @@ endef
 # Targets
 #############################################
 all: $(call depends,toolchain,prepare)
+
+clean:
+	rm -rf '$(dl_dir)' '$(toolchain_dir)' '$(state_dir)'
+
+dirclean:
+	rm -rf '$(toolchain_dir)'
+	find '$(state_dir)' -type f -not -name '$(notdir $(call depends,toolchain,download))' -delete
 
 $(call depends,toolchain,prepare): $(call depends,toolchain,download)
 	$(prepare)

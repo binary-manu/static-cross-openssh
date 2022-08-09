@@ -4,6 +4,8 @@ endif
 
 host_triplet := $(subst -gcc,,$(firstword $(notdir $(wildcard $(toolchain_dir)/bin/*-gcc))))
 
+dl_dir := $(dl_dir)/package
+state_dir := $(state_dir)/package
 host_path := $(PATH)
 PREFIX ?= /system/opt/openssh
 prefix := $(PREFIX)
@@ -49,9 +51,8 @@ endef
 define downloadpkg =
 	mkdir -p '$(dl_dir)'
 	cd '$(dl_dir)'
-	if [ -n '$($1/TARBALL)' ] && \
-			[ ! -f '$(top_dir)/$(call depends,$1,download)' ]; then
-		wget --quiet '$($1/TARBALL)'
+	if [ -n '$($1/TARBALL)' ]; then
+		wget -r '$($1/TARBALL)'
 	fi
 	$(call depfile,$1,download)
 endef
@@ -88,3 +89,10 @@ all: $(PACKAGES)
 
 # Import dependencies between packages and package stages
 $(foreach pkg,$(PACKAGES),$(call declareonce,$(pkg)))
+
+clean:
+	rm -rf '$(dl_dir)' '$(state_dir)' '$(staging_dir)' '$(bin_dir)' '$(build_dir)'
+
+dirclean:
+	rm -rf '$(staging_dir)' '$(bin_dir)' '$(build_dir)'
+	find '$(state_dir)' -type f -not -name '$(notdir $(call depends,*,download))' -delete
