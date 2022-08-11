@@ -24,7 +24,7 @@ endef
 define openssh/package :=
 	cd '$(staging_dir)/$(prefix)'
 	echo $(openssh/binfiles) | xargs -n1 $(host_triplet)-strip -s
-	tar -czf $(openssh/bin) --transform 's ^ $(prefix)/ ' \
+	tar -czf $(openssh/bin) --transform 's|^|$(shell echo '$(prefix)' | sed 's|^/*||')/|' \
 		--owner=root:0 --group=root:0 \
 		$(openssh/binfiles) $(openssh/conffiles) \
 		$(openssh/emptydir)
