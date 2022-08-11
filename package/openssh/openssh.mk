@@ -6,6 +6,7 @@ openssh/dir := $(build_dir)/openssh/openssh-portable-$(openssh/VERSION)
 openssh/bin := $(bin_dir)/openssh-$(openssh/VERSION).tgz
 openssh/binfiles := sbin/sshd libexec/sftp-server
 openssh/conffiles := etc/sshd_config
+openssh/emptydir := var/empty
 
 define openssh/build :=
 	cd $(openssh/dir)
@@ -24,5 +25,7 @@ define openssh/package :=
 	cd '$(staging_dir)/$(prefix)'
 	echo $(openssh/binfiles) | xargs -n1 $(host_triplet)-strip -s
 	tar -czf $(openssh/bin) --transform 's ^ $(prefix)/ ' \
-		$(openssh/binfiles) $(openssh/conffiles)
+		--owner=root:0 --group=root:0 \
+		$(openssh/binfiles) $(openssh/conffiles) \
+		$(openssh/emptydir)
 endef
