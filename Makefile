@@ -19,15 +19,15 @@ toolchain:
 	'$(MAKE)' -f toolchain.mk
 
 clean:
-	$(MAKE) -f package.mk clean
-	$(MAKE) -f toolchain.mk clean
+	'$(MAKE)' -f package.mk clean
+	'$(MAKE)' -f toolchain.mk clean
 
 dirclean:
-	$(MAKE) -f package.mk dirclean
-	$(MAKE) -f toolchain.mk dirclean
+	'$(MAKE)' -f package.mk dirclean
+	'$(MAKE)' -f toolchain.mk dirclean
 
 # Delete the toolchain ands its downloads,
 # but keep downloaded packages
 switch-toolchain:
-	$(MAKE) -f package.mk dirclean
-	$(MAKE) -f toolchain.mk clean
+	'$(MAKE)' -f package.mk dirclean
+	'$(MAKE)' -f toolchain.mk clean
