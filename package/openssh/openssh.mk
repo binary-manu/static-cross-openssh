@@ -9,12 +9,12 @@ openssh/conffiles := etc/sshd_config
 openssh/emptydir := var/empty
 
 define openssh/build :=
-	cd $(openssh/dir)
+	+cd $(openssh/dir)
 	env PATH='$(host_path)' autoreconf -i
 	./configure LDFLAGS="-static $(LDFLAGS)" LIBS="-lpthread" \
 		--prefix="$(prefix)" --host="$(host_triplet)" --disable-strip \
 		--with-privsep-user=root --with-privsep-path=$(prefix)/var/empty
-	+'$(MAKE)'
+	'$(MAKE)'
 endef
 
 define openssh/install :=

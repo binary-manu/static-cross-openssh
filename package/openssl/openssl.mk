@@ -4,10 +4,10 @@ openssl/TARBALL := https://www.openssl.org/source/openssl-$(openssl/VERSION).tar
 openssl/dir = $(build_dir)/openssl/openssl-$(openssl/VERSION)
 
 define openssl/build :=
-	cd '$(openssl/dir)'
+	+cd '$(openssl/dir)'
 	./Configure --prefix="$(prefix)" --cross-compile-prefix="$(host_triplet)-" \
 		no-shared no-asm linux-elf
-	+'$(MAKE)'
+	'$(MAKE)'
 endef
 
 define openssl/install :=
