@@ -12,6 +12,14 @@ changes. For example, versions `0.2.x` are not compatible with `0.1.x`.
 
 ## [Unreleased]
 
+## [0.1.1] - 2022-08-16
+
+### Fixed
+
+* Quote expansions of `$(MAKE)` in recipes.
+* Properly place `+` markers on the first recipe line when using
+  `.ONESHELL`.
+
 ## [0.1.0] - 2022-08-11
 
 ### Added
