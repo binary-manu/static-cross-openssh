@@ -10,7 +10,15 @@ the minor number is incremented when backward-incompatible changes are
 made, while the third number is incremented for backward compatible
 changes. For example, versions `0.2.x` are not compatible with `0.1.x`.
 
-## [Unreleased]
+## [Unreleased] 
+
+## [0.1.2] - 2023-06-15
+
+### Changed
+
+* Updated zlib to 1.2.13
+* Updated openssl to 1.1.1u
+* Updated openssh to 9.3
 
 ## [0.1.1] - 2022-08-16
 
