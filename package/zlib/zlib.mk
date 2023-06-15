@@ -1,4 +1,4 @@
-zlib/VERSION := 1.2.12
+zlib/VERSION := 1.2.13
 zlib/TARBALL := https://zlib.net/zlib-$(zlib/VERSION).tar.gz
 
 zlib/dir = $(build_dir)/zlib/zlib-$(zlib/VERSION)
