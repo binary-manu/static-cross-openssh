@@ -1,4 +1,4 @@
-openssh/VERSION := V_9_3_P1
+openssh/VERSION := V_9_4_P1
 openssh/TARBALL := https://github.com/openssh/openssh-portable/archive/refs/tags/$(openssh/VERSION).tar.gz
 openssh/DEPENDS := zlib openssl
 
