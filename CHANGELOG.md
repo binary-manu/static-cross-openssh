@@ -12,6 +12,13 @@ changes. For example, versions `0.2.x` are not compatible with `0.1.x`.
 
 ## [Unreleased] 
 
+## [0.1.3] - 2023-08-11
+
+### Changed
+
+* Updated openssl to 1.1.1v
+* Updated openssh to 9.4
+
 ## [0.1.2] - 2023-06-15
 
 ### Changed
