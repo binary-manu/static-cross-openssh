@@ -1,4 +1,13 @@
-openssh/VERSION := V_9_4_P1
+openssh/DEFAULT_VERSION := V_9_4_P1
+define openssh/determine_latest
+  $(eval override openssh/VERSION := $(shell
+    . ./version.sh;
+	list_github_tags https://github.com/openssh/openssh-portable |
+	sort_versions | tail -n 1
+  ))
+endef
+$(call determine_version,openssh,$(openssh/DEFAULT_VERSION))
+
 openssh/TARBALL := https://github.com/openssh/openssh-portable/archive/refs/tags/$(openssh/VERSION).tar.gz
 openssh/DEPENDS := zlib openssl
 

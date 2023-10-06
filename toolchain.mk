@@ -1,25 +1,27 @@
+include functions.mk
+
 ARCH ?= armv7-eabihf
+
+__toolchain__/DEFAULT_VERSION := 2021.11-5
+define __toolchain__/determine_latest
+  $(eval override __toolchain__/VERSION := $(shell . ./version.sh; list_bootlin_versions $(ARCH) | sort_versions | tail -n 1))
+endef
+$(call determine_version,__toolchain__,$(__toolchain__/DEFAULT_VERSION))
 
 dl_dir := $(dl_dir)/toolchain
 state_dir := $(state_dir)/toolchain
-toolchain_url := https://toolchains.bootlin.com/downloads/releases/toolchains/$(ARCH)/tarballs/$(ARCH)--musl--stable-2021.11-%d.tar.bz2
+toolchain_url := https://toolchains.bootlin.com/downloads/releases/toolchains/$(ARCH)/tarballs/$(ARCH)--musl--stable-$(__toolchain__/VERSION).tar.bz2
 toolchain_file := toolchain-$(ARCH).tar.bz2
 
 .PHONY: all
 .SHELLFLAGS = -e -c
 .ONESHELL:
 
-include functions.mk
 
 define download =
 	mkdir -p '$(dl_dir)'
 	cd '$(dl_dir)'
-	# The last date component can changes, we may not have a .1, so try up to 32
-	for i in $$(seq 32); do
-		err=0
-		wget  "$$(printf '$(toolchain_url)' $$i)" -O- > '$(dl_dir)/$(toolchain_file)' || err=$$?
-		[ $$err -eq 8 ] && continue || [ $$err -eq 0 ] && break
-	done
+	curl -L '$(toolchain_url)' -o '$(dl_dir)/$(toolchain_file)'
 	$(call depfile,toolchain,download)
 endef
 

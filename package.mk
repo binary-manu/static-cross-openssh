@@ -1,3 +1,5 @@
+include functions.mk
+
 ifneq "$(shell [ -d '$(toolchain_dir)/bin' ] && echo 1)" "1"
   toolchain_dir := $(wildcard $(toolchain_dir)/*)
 endif
@@ -19,8 +21,6 @@ export LDFLAGS := -L$(staging_dir)/$(prefix)/lib
 
 # If no package is specifies, build openssh
 PACKAGES ?= openssh
-
-include functions.mk
 
 #############################################
 # Dynamically declare dependencies between packages
