@@ -1,4 +1,4 @@
-zlib/DEFAULT_VERSION := 1.2.13
+zlib/DEFAULT_VERSION := 1.3
 define zlib/determine_latest
   $(eval override zlib/VERSION := $(shell
     . ./version.sh;
