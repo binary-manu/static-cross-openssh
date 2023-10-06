@@ -29,6 +29,8 @@ brutally simplified form.
 
 ## Usage
 
+### Basic
+
 To start a build, just enter the directory and run:
 
 ```bash
@@ -46,6 +48,45 @@ inside the toolchain. The downloaded archive is the stable version using
 `PREFIX` is the installation prefix of the tool, that will be passed to
 configuration script (i.e. `./configure --prefix="..."`). The default is
 `/system/opt/openssh`.
+
+### Version selection
+
+Makefiles come with default versions for packages, which have been tested to
+compile.  In order to avoid frequent updates to track upstream releases, a new
+mode has been implemented which allows some (or all) packages, plus the
+toolchain, to be built from the latest upstream versions.
+
+For each of the packages:
+
+* `zlib`
+* `openssh`
+* `openssl`
+* `__toolchain__` (this is not a package name, it's used as a placeholder to refer
+  to the toolchain)
+
+one can set the variable `xxx/VERSION` (where `xxx` is one of the items above) in the
+following ways:
+
+* keep it undefined: the default version for the package will be used, just as before;
+* define it to an empty string: requests the latest upstream version to be used;
+* define it to a non-empty string: override the default and use this version.
+
+For the expected common case of using the latest versions of _all_ components,
+the special variable `__all__/VERSION` shall be defined to `latest`. This
+triggers the makefiles to just grab all the latest and greatest versions.
+
+Examples:
+
+```bash
+# Override zlib version, but use the defaults for the rest
+make zlib/VERSION=1.2.3
+# Override the toolchain version, use the defaults for all packages
+make __toolchain__/VERSION=2022.05-1
+# Use the latest toolchain and openssh
+make __toolchain__/VERSION= openssh/VERSION=
+# Use the latest versions for packages and the toolchain
+make __all__/VERSION=latest
+```
 
 ## Limitations
 
