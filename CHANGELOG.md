@@ -10,7 +10,17 @@ the minor number is incremented when backward-incompatible changes are
 made, while the third number is incremented for backward compatible
 changes. For example, versions `0.2.x` are not compatible with `0.1.x`.
 
-## [Unreleased] 
+## [Unreleased]
+
+## [0.1.4] - 2023-10-06
+
+### Added
+
+* Implemenmted a machanism to control versions of packages and the
+  toolchain without editing the makefiles. It is also possible to use
+  the latest versions for all components. Note that, for OpenSSL, the
+  _latest_ version means 3.x, while the default version in the makefile
+  has been kept to 1.x for now.
 
 ## [0.1.3] - 2023-08-11
 
