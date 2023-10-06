@@ -2,7 +2,7 @@ include functions.mk
 
 ARCH ?= armv7-eabihf
 
-__toolchain__/DEFAULT_VERSION := 2021.11-5
+__toolchain__/DEFAULT_VERSION := 2021.11-%d
 define __toolchain__/determine_latest
   $(eval override __toolchain__/VERSION := $(shell . ./version.sh; list_bootlin_versions $(ARCH) | sort_versions | tail -n 1))
 endef
@@ -21,7 +21,12 @@ toolchain_file := toolchain-$(ARCH).tar.bz2
 define download =
 	mkdir -p '$(dl_dir)'
 	cd '$(dl_dir)'
-	curl -L '$(toolchain_url)' -o '$(dl_dir)/$(toolchain_file)'
+	# The last date component can change, we may not have a .1, so try up to 32
+	for i in $$(seq 32); do
+		err=0
+		wget  "$$(printf '$(toolchain_url)' $$i)" -O- > '$(dl_dir)/$(toolchain_file)' || err=$$?
+		[ $$err -eq 8 ] && continue || [ $$err -eq 0 ] && break
+	done
 	$(call depfile,toolchain,download)
 endef
 
