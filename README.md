@@ -1,5 +1,8 @@
 # static-cross-openssh: statically cross-compile sshd and sftp-server
 
+[![binary-manu](https://circleci.com/gh/binary-manu/static-cross-openssh.svg?style=shield)](https://app.circleci.com/pipelines/github/binary-manu/static-cross-openssh)
+_Click here to grab prebuilt binaries from CircleCI artifacts_
+
 This project means to be an easy way to rapidly build cross-compiled,
 static executables for the openssh server and its SFTP subsystem. They
 can then be used to get ssh access on devices such as embedded Linux
@@ -160,5 +163,16 @@ your device, if any):
 
 [original-script]: https://gist.github.com/fumiyas/b4aaee83e113e061d1ee8ab95b35608b
 [bootlin-toolchains]: https://toolchains.bootlin.com/
+
+## Prebuilt binaries
+
+Monthly builds from the latest package versions and toolchain are available via
+CircleCI. Click on the status shield at the top of the page to go to the CI
+system, select the pipeline from the month you want, and grab the binaries from
+the artifacts pane.
+
+Currently, we build for x86-64, ARMv7 and AArch64. ARM versions are available in
+an "Android" variant which simply uses a different installation prefix, to place
+stuff under `/system`.
 
 <!-- vi: set et sw=2 sts=-1 ts=2 smartindent fo=tcroqna tw=72 : -->
