@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   build:
     environment:
-      MAKEFLAGS: -j4
+      MAKEFLAGS: -j4 __all__/VERSION=latest
     docker:
       - image: cimg/base:stable
     steps:
