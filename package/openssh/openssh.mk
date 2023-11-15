@@ -13,7 +13,11 @@ openssh/DEPENDS := zlib openssl
 
 openssh/dir := $(build_dir)/openssh/openssh-portable-$(openssh/VERSION)
 openssh/bin := $(bin_dir)/openssh-$(openssh/VERSION).tgz
-openssh/binfiles := sbin/sshd libexec/sftp-server
+openssh/binfiles := \
+    sbin/sshd \
+    $(addprefix bin/,ssh scp ssh-add ssh-agent ssh-keygen ssh-keyscan sftp) \
+    $(addprefix libexec/,sftp-server ssh-keysign)
+
 openssh/conffiles := etc/sshd_config
 openssh/emptydir := var/empty
 
