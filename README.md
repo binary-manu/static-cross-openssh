@@ -1,6 +1,6 @@
 # static-cross-openssh: statically cross-compile sshd and sftp-server
 
-[![binary-manu](https://circleci.com/gh/binary-manu/static-cross-openssh.svg?style=shield)](https://app.circleci.com/pipelines/github/binary-manu/static-cross-openssh)
+[![binary-manu](https://circleci.com/gh/binary-manu/static-cross-openssh/tree/master.svg?style=shield)](https://app.circleci.com/pipelines/github/binary-manu/static-cross-openssh?branch=master)
 _Click here to grab prebuilt binaries from CircleCI artifacts_
 
 This project means to be an easy way to rapidly build cross-compiled,
