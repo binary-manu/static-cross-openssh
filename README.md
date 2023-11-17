@@ -140,7 +140,7 @@ mv bin/* ~/my-static-ssh/x86-64/
 ## Install under Android
 
 If you need to install sshd on Android, the defaults should be good
-enough as the armv7 build will also work on 64 bit devices. To install
+enough as the armv7 build will also work on (most) 64 bit devices. To install
 it, follow these instructions (with appropriate modifications required by
 your device, if any):
 
@@ -161,9 +161,6 @@ your device, if any):
 * remount the system partition read-only;
 * enjoy!
 
-[original-script]: https://gist.github.com/fumiyas/b4aaee83e113e061d1ee8ab95b35608b
-[bootlin-toolchains]: https://toolchains.bootlin.com/
-
 ## Prebuilt binaries
 
 Monthly builds from the latest package versions and toolchain are available via
@@ -174,5 +171,8 @@ the artifacts pane.
 Currently, we build for x86-64, ARMv7 and AArch64. ARM versions are available in
 an "Android" variant which simply uses a different installation prefix, to place
 stuff under `/system`.
+
+[original-script]: https://gist.github.com/fumiyas/b4aaee83e113e061d1ee8ab95b35608b
+[bootlin-toolchains]: https://toolchains.bootlin.com/
 
 <!-- vi: set et sw=2 sts=-1 ts=2 smartindent fo=tcroqna tw=72 : -->
