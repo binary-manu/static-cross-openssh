@@ -1,17 +1,17 @@
-# static-cross-openssh: statically cross-compile sshd and sftp-server
+# static-cross-openssh: statically cross-compile ssh
 
 [![binary-manu](https://circleci.com/gh/binary-manu/static-cross-openssh.svg?style=shield)](https://app.circleci.com/pipelines/github/binary-manu/static-cross-openssh)
 _Click here to grab prebuilt binaries from CircleCI artifacts_
 
 This project means to be an easy way to rapidly build cross-compiled,
-static executables for the openssh server and its SFTP subsystem. They
+static executables for the openssh tools. They
 can then be used to get ssh access on devices such as embedded Linux
 systems or Android phones, without depending on larger toolkits like
 Termux. On rooted Android devices, it is easy to set up sshd to get root
 access to the whole filesystem from another device using an SFTP client.
 
 The goal here is simplicity, which takes precedence over performance and
-security. It is assumed that the built service will run as root and that
+security. It is assumed that the built services will run as root and that
 will by started by the user, only when needed. It's not meant to replace
 properly built SSH apps or packages, just to be a way out when you need
 an SSH for some exotic device for occasional use.
