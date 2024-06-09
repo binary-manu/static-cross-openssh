@@ -26,3 +26,6 @@ ifeq "$(__all__/VERSION)" "latest"
 else
   determine_version = $(if $(subst undefined,,$(origin $1/VERSION)),$(call determine_helper,$1),$(eval $1/VERSION := $2))
 endif
+
+# Wrapper for shell that checks the return value and bais of if there was an error
+shell_checked = $(shell $1)$(if $(filter-out 0,$(.SHELLSTATUS)),$(error Execution of $1 failed with $(.SHELLSTATUS)))

@@ -1,6 +1,7 @@
 /build_dir/
 /dl/
 /staging_dir/
-/toolchain/
 /state_dir/
 /bin/
+/output/
+/.config

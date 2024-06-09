@@ -1,6 +1,6 @@
-openssl/DEFAULT_VERSION := 1.1.1w
+openssl/DEFAULT_VERSION := 3.3.1
 define openssl/determine_latest
-  $(eval override openssl/VERSION := $(shell
+  $(eval override openssl/VERSION := $(call shell_checked,
     . ./version.sh;
 	list_github_tags https://github.com/openssl/openssl |
 	sed -En
@@ -15,13 +15,13 @@ openssl/TARBALL := https://www.openssl.org/source/openssl-$(openssl/VERSION).tar
 
 openssl/dir = $(build_dir)/openssl/openssl-$(openssl/VERSION)
 
-define openssl/build :=
+define openssl/build =
 	+cd '$(openssl/dir)'
 	./Configure --prefix="$(prefix)" --cross-compile-prefix="$(host_triplet)-" \
-		no-shared no-asm linux-elf
+		no-shared no-asm linux-elf no-docs
 	'$(MAKE)'
 endef
 
-define openssl/install :=
+define openssl/install =
 	+'$(MAKE)' -C '$(openssl/dir)' install DESTDIR='$(staging_dir)'
 endef

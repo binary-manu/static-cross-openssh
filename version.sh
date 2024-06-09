@@ -1,3 +1,5 @@
+set -exo pipefail
+
 list_github_tags() {
   git ls-remote --tags --refs "$1" | grep -o 'refs/tags/.*' | cut -d/ -f3-
 }
