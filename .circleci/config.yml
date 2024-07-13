@@ -3,25 +3,38 @@ version: 2.1
 jobs:
   build:
     environment:
-      MAKEFLAGS: -j4 __all__/VERSION=latest
+      # Override the shell to something that supports pipefail
+      MAKEFLAGS: -j4 SHELL=/usr/bin/bash
     docker:
       - image: cimg/base:stable
     steps:
       - checkout
-      - run: mkdir artifacts
-      - run: make ARCH=x86-64       PREFIX=/opt/openssh
-      - run: mv   bin/*             artifacts/openssh-x86-64.tgz
-      - run: make switch-toolchain
-      - run: make ARCH=armv7-eabihf PREFIX=/opt/openssh
-      - run: mv   bin/*             artifacts/openssh-armv7-eabihf.tgz
-      - run: make dirclean
-      - run: make ARCH=armv7-eabihf PREFIX=/system/opt/openssh
-      - run: mv   bin/*             artifacts/openssh-armv7-eabihf-android.tgz
-      - run: make switch-toolchain
-      - run: make ARCH=aarch64      PREFIX=/opt/openssh
-      - run: mv   bin/*             artifacts/openssh-aarch64.tgz
-      - run: make dirclean
-      - run: make ARCH=aarch64      PREFIX=/system/opt/openssh
-      - run: mv   bin/*             artifacts/openssh-aarch64-android.tgz
+      - run: mkdir -p artifacts
+
+      - run: make config ARCH=x86-64       PREFIX=/opt/openssh        __all__/VERSION=latest
+      - run: make
+      - run: mv output/x86-64/bin artifacts/x86-64
+      - run: make clean-arch
+
+      - run: make config ARCH=armv7-eabihf PREFIX=/system/opt/openssh __all__/VERSION=latest
+      - run: make
+      - run: mv output/armv7-eabihf/bin artifacts/armv7-eabihf-android
+      - run: make clean-config
+
+      - run: make config ARCH=armv7-eabihf PREFIX=/opt/openssh        __all__/VERSION=latest
+      - run: make
+      - run: mv output/armv7-eabihf/bin artifacts/armv7-eabihf
+      - run: make clean-arch
+
+      - run: make config ARCH=aarch64 PREFIX=/system/opt/openssh __all__/VERSION=latest
+      - run: make
+      - run: mv output/aarch64/bin artifacts/aarch64-android
+      - run: make clean-config
+
+      - run: make config ARCH=aarch64 PREFIX=/opt/openssh        __all__/VERSION=latest
+      - run: make
+      - run: mv output/aarch64/bin artifacts/aarch64
+      - run: make clean-arch
+
       - store_artifacts:
           path: artifacts/
