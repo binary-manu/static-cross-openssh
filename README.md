@@ -3,6 +3,9 @@
 [![binary-manu](https://circleci.com/gh/binary-manu/static-cross-openssh/tree/master.svg?style=shield)](https://app.circleci.com/pipelines/github/binary-manu/static-cross-openssh?branch=master)
 _Click here to grab prebuilt binaries from CircleCI artifacts_
 
+_Warning: if you already used this project, please skim through the docs
+again, as a new major rewrite is out and some things work differently._
+
 This project means to be an easy way to rapidly build cross-compiled,
 static executables for the openssh tools. They
 can then be used to get ssh access on devices such as embedded Linux
@@ -37,7 +40,7 @@ brutally simplified form.
 To start a build, just enter the directory and run:
 
 ```bash
-make [ARCH=<target-arch>] [PREFIX=<prefix>]
+make config [ARCH=<target-arch>] [PREFIX=<prefix>]
 ```
 
 `ARCH` is the name of an architecture for which bootlin provides a
@@ -52,12 +55,22 @@ inside the toolchain. The downloaded archive is the stable version using
 configuration script (i.e. `./configure --prefix="..."`). The default is
 `/system/opt/openssh`.
 
+This generates a hidden configuration file `.config`, which records the
+selected architecture, prefix path as well as the chosen versions of all
+packages that are going to be built. This file allows for reproducible
+builds so that the same packages are used over and over even if there
+are upstream updates.
+
+To actually run the build, just type `make`. `config` must always be
+used on its own, so don't do `make config all`.
+
 ### Version selection
 
-Makefiles come with default versions for packages, which have been tested to
-compile.  In order to avoid frequent updates to track upstream releases, a new
-mode has been implemented which allows some (or all) packages, plus the
-toolchain, to be built from the latest upstream versions.
+Makefiles come with default versions for packages and the toolchain,
+which have been tested to compile.  In order to avoid frequent updates
+to track upstream releases, the build system can query online sources
+for the latest upstream versions and use those, rather than the
+defaults, at configuration time.
 
 For each of the packages:
 
@@ -70,7 +83,7 @@ For each of the packages:
 one can set the variable `xxx/VERSION` (where `xxx` is one of the items above) in the
 following ways:
 
-* keep it undefined: the default version for the package will be used, just as before;
+* keep it undefined: the default version for the package will be used;
 * define it to an empty string: requests the latest upstream version to be used;
 * define it to a non-empty string: override the default and use this version.
 
@@ -82,14 +95,29 @@ Examples:
 
 ```bash
 # Override zlib version, but use the defaults for the rest
-make zlib/VERSION=1.2.3
+make config zlib/VERSION=1.2.3
+make
+
 # Override the toolchain version, use the defaults for all packages
-make __toolchain__/VERSION=2022.05-1
+make config __toolchain__/VERSION=2022.05-1
+make
+
 # Use the latest toolchain and openssh
-make __toolchain__/VERSION= openssh/VERSION=
+make config __toolchain__/VERSION= openssh/VERSION=
+make
+
 # Use the latest versions for packages and the toolchain
-make __all__/VERSION=latest
+make config __all__/VERSION=latest
+make
 ```
+
+## Features
+
+* Builds for different architectures can cohexists side by side. A
+  configuration file selects the current architecture.
+* Online queries for the latest versions.
+* If a package version is changed in the config file, that package,
+  along all of its dependants, are rebuilt automatically.
 
 ## Limitations
 
@@ -98,43 +126,79 @@ make __all__/VERSION=latest
   modify a file inside a package build folder and run `make` again, it
   won't rebuild the package because it uses a separate dependency file
   to track that the build has already been done.
-* Changing the toolchain requires deleting the current one and
-  downloading the new one.
 * OpenSSL is currently built without assembly optimizations.
+* If the prefix is changed inside the configuration file, the whole
+  build must be cleaned and re-run manually, as the makefiles won't pick
+  this up.
 
 ## Requirements
 
 On the host, you'll need:
 
-* GNU Make
+* GNU coreutils
+* GNU tar
+* GNU sed
+* GNU make
 * GNU autotools (for autoreconf)
-* wget
+* curl
+* Whatever shell is used for `/bin/sh`, it must support the `pipefail`
+  option. Otherwise, see [troubleshooting](#troubleshooting) for a
+  workaround.
 
 ## Make targets
 
 * `all`: the default, downloads the toolchain, the packages sources,
-builds them and prepares a tarball with the static sshd binaries under
-`$PWD/bin`;
-* `clean`: deletes everything
-* `dirclean`: like `clean`, but preserves downloaded sources and
-  the toolchain
-* `switch-toolchain`: like `dirclean`, but also deletes the toolchain.
-  This should be used to prepare the environment before building for a
-  different architecture, so that tarballs for package sources are
-  kept, but the toolchain is deleted.
+builds them and prepares a tarball with the static sshd binaries;
+* `nuke`: deletes everything, including the configuration file;
+* `clean-all`: like `nuke`, but preserves the configuration file;
+* `clean-build`: like `clean-all`, but also preserves downloaded sources
+  and the toolchain;
+* `clean-config`: only deletes build artifacts for the current
+  architecture;
+* `clean-arch`: only deletes build artifacts and downloads for the
+  current architecture.
 
+## Directory structure
+
+    .
+    ├── dl                          # All downloads go here
+    │   ├── $arch                   # Divided by architecture
+    │   │   └── __toolchain__       # Since toolchains are prebuilt
+    │   │       └── $version         
+    │   └── noarch                  # But sources are common
+    │       └── $package             
+    │           └── $version        # And we can store multiple versions
+    ├── output                      # All build artifacts go here
+    │   └── $arch                   # Divided by architecture
+    │       ├── bin                 # Binary tarballs go here
+    │       │   └── config          # Along with the config that was used for the build
+    │       ├── build_dir           # Build directories for unpacked sources
+    │       │   ├── $package
+    │       │   │   └── $version
+    │       │   └── __toolchain__
+    │       │       └── $version
+    │       ├── staging_dir         # Staging area for installed stuff
+    │       │   └── $prefix
+    │       └── state_dir           # State files for dependency tracking
+    │           ├── __toolchain__
+    │           │   └── $version
+    │           └── $package
+    │               └── $version
+    └── package
+        ├── openssh
+        ├── openssl
+        └── zlib
 
 ## Examples
 
 ```bash
 # Default armv7 build
+make config
 make -j$(nproc)
-mv bin/* ~/my-static-ssh/armv7/
 
-# Clean the environment and build for x86-64
-make switch-toolchain
-make -j$(nproc) ARCH=x86-64 PREFIX=/usr/local
-mv bin/* ~/my-static-ssh/x86-64/
+# Use a different path and architecture
+make ARCH=x86-64 PREFIX=/usr/local
+make -j$(nproc)
 ```
 
 ## Install under Android
@@ -174,5 +238,23 @@ stuff under `/system`.
 
 [original-script]: https://gist.github.com/fumiyas/b4aaee83e113e061d1ee8ab95b35608b
 [bootlin-toolchains]: https://toolchains.bootlin.com/
+
+## Troubleshooting
+<a name=troubleshooting>
+
+* __My `/bin/sh` does not support pipefail and I cannot build__
+
+  This may happen, for example, inside containers using trimmed-down
+  shells as `/bin/sh`. You can force `make` to use another shell by
+  calling it as follows: `make SHELL=/path/to/my/shell`. The chosen
+  shell must support POSIX scripting syntax as well as `pipefail`. A
+  common option is `bash`.
+
+  Alternatively, to avoid passing `SHELL` to all invocations, set the
+  following environment variable:
+
+  ```sh
+  export MAKEFLAGS=SHELL=/path/to/my/shell
+  ```
 
 <!-- vi: set et sw=2 sts=-1 ts=2 smartindent fo=tcroqna tw=72 : -->
