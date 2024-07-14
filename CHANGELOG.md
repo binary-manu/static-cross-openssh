@@ -12,6 +12,31 @@ changes. For example, versions `0.2.x` are not compatible with `0.1.x`.
 
 ## [Unreleased]
 
+## [0.2.0] - 2024-07-14
+
+### Changed
+
+* Many things: it's major rewrite. Here's a few.
+* Updated default package versions.
+* Before building, a configuration file must be produced by using `make
+  config` or by copying an existing one.
+* It is no longer necessary to delete the toolchain to switch to a
+  different architecture.
+* Better directory tree organization to support multi-architecture.
+
+### Added
+
+* Side-by-side multi-architecture support. You can build for an
+  architecture without deleting the toolchains or artifacts for others.
+* Real dependency tracking among package versions: if a package version
+  is changed in the configuration file, it is not necessary to rebuild
+  everything: only that package and its dependant will be rebuilt.
+  Changing the toolchain forces a full rebuild. Changes to the prefix
+  are currently not tracked.
+* Configuration files are copied alongside binaries so that they work as
+  a "bill of material" of sources used for the build. They can be used
+  to remake that exact build.
+
 ## [0.1.4] - 2023-10-06
 
 ### Added
