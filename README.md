@@ -25,7 +25,7 @@ I was looking for a way to statically build OpenSSH, and found [this
 script][original-script].
 
 It worked well, but it didn't support cross compilation. Also, it would
-redownload stuff everytime it was run. So I turned it into a set of
+re-download stuff every time it was run. So I turned it into a set of
 Makefiles to take advantage of its dependency tracking, then added
 cross-compilation support by automatically downloading ready-made
 toolchains from [bootlin][bootlin-toolchains].
@@ -113,11 +113,11 @@ make
 
 ## Features
 
-* Builds for different architectures can cohexists side by side. A
+* Builds for different architectures can coexists side by side. A
   configuration file selects the current architecture.
 * Online queries for the latest versions.
-* If a package version is changed in the config file, that package,
-  along all of its dependants, are rebuilt automatically.
+* If a package version is changed in the configuration file, that
+  package, along all of its dependants, are rebuilt automatically.
 
 ## Limitations
 
