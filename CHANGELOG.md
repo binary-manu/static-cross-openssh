@@ -16,7 +16,7 @@ changes. For example, versions `0.2.x` are not compatible with `0.1.x`.
 
 ### Added
 
-* Implemenmted a machanism to control versions of packages and the
+* Implemented a mechanism to control versions of packages and the
   toolchain without editing the makefiles. It is also possible to use
   the latest versions for all components. Note that, for OpenSSL, the
   _latest_ version means 3.x, while the default version in the makefile
