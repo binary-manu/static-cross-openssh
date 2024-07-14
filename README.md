@@ -240,7 +240,7 @@ stuff under `/system`.
 [bootlin-toolchains]: https://toolchains.bootlin.com/
 
 ## Troubleshooting
-<a name=troubleshooting>
+<a name=troubleshooting></a>
 
 * __My `/bin/sh` does not support pipefail and I cannot build__
 
