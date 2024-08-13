@@ -21,6 +21,16 @@ openssh/binfiles := \
 openssh/conffiles := etc/sshd_config
 openssh/emptydir := var/empty
 
+
+ifeq "$(call shrink_level_at_least,$(SHRINK_LEVEL_RUNTIME))" "1"
+  openssh/upx := upx --best --lzma -q
+  # UPX will try to compress this file to check if it can be done (it does not
+  # support all possible architectures)
+  openssh/upx_test_file := $(filter %/scp,$(openssh/binfiles))
+else
+  openssh/upx := false
+endif
+
 define openssh/build =
 	+cd $(openssh/dir)
 	env PATH='$(host_path)' autoreconf -i
@@ -36,7 +46,16 @@ endef
 
 define openssh/package =
 	cd '$(staging_dir)/$(prefix)'
-	echo $(openssh/binfiles) | xargs -n1 $(host_triplet)-strip -s
+	echo $(openssh/binfiles) | xargs -n1 $(host_triplet)-strip -sv
+
+	# Try compressing with UPX if enabled and available
+	# UPX bails out on SUID files, so remove the bit before and restore it after
+	$(openssh/upx) '$(openssh/upx_test_file)' && {
+	  chmod u-s $(filter %/ssh-keysign,$(openssh/binfiles))
+	  echo $(filter-out $(openssh/upx_test_file),$(openssh/binfiles)) | xargs -n1 $(openssh/upx)
+	  chmod u+s $(filter %/ssh-keysign,$(openssh/binfiles))
+	}
+
 	tar -czf $(openssh/bin) --transform 's|^|$(call shell_checked,echo '$(prefix)' | sed 's|^/*||')/|' \
 		--owner=root:0 --group=root:0 \
 		$(openssh/binfiles) $(openssh/conffiles) \
