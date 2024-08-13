@@ -50,7 +50,7 @@ all: packages
 
 packages: toolchain
 	# Always clean the staging area before a build, so that
-	# it is not necessary to track what i salready present
+	# it is not necessary to track what is already present
 	# there in case of a config change. Packages will be
 	# reinstalled at each run, but not rebuilt.
 	rm -rf '$(staging_dir)'
