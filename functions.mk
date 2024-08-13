@@ -29,3 +29,14 @@ endif
 
 # Wrapper for shell that checks the return value and bails out if there was an error
 shell_checked = $(shell $1)$(if $(filter-out 0,$(.SHELLSTATUS)),$(error Execution of $1 failed with $(.SHELLSTATUS)))
+
+# Helpers for smaller build
+# Do not try to make the build smaller
+SHRINK_LEVEL_NONE    :=  0
+# Only apply size-reducing techniques that have no runtime costs (i.e. disable features when building)
+SHRINK_LEVEL_BUILD   := 10
+# Also apply size-reducing techniques that have runtime costs (i.e. UPX)
+SHRINK_LEVEL_RUNTIME := 20
+
+# Will output "1" if the current shrink level is >= the argument, "" otherwise.
+shrink_level_at_least = $(shell [ "$($(shrink))" -ge "$1" ] && echo 1)

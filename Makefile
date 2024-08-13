@@ -10,6 +10,14 @@ endif
 export top_dir     := $(PWD)
 export config_file := $(top_dir)/.config
 
+# Configuration items, default values
+export arch   := armv7-eabihf
+export prefix := /system/opt/openssh
+export shrink := SHRINK_LEVEL_NONE
+
+# Need this for SHRINK_LEVEL_* definitions
+include functions.mk
+
 goals_needing_config := all toolchain packages clean-config clean-arch
 
 ifeq "$(filter config,$(MAKECMDGOALS))" ""
@@ -25,8 +33,10 @@ else
     # Configuring, we need a configuration name. Use the default
     # if none is provided. No other goals can go together with
     # config.
-    export arch := $(or $(ARCH),armv7-eabihf)
-    export prefix := $(or $(PREFIX),/system/opt/openssh)
+    arch   := $(or $(ARCH),$(arch))
+    prefix := $(or $(PREFIX),$(prefix))
+    shrink := $(if $($(SHRINK)),$(SHRINK),$(shrink))
+
     ifneq "$(filter-out config,$(MAKECMDGOALS))" ""
         $(error The config target must be used on its own)
     endif
@@ -64,6 +74,7 @@ config: $(config_file)
 $(config_file)::
 	printf 'export %s := %s\n' 'arch' '$(arch)' > '$(config_file)'
 	printf 'export %s := %s\n' 'prefix' '$(prefix)' >> '$(config_file)'
+	printf 'export %s := %s\n' 'shrink' '$(shrink)' >> '$(config_file)'
 	'$(MAKE)' -f toolchain.mk config
 	'$(MAKE)' -f package.mk config
 
