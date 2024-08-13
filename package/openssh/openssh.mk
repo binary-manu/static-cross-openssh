@@ -16,7 +16,7 @@ openssh/bin = $(bin_dir)/openssh-$(openssh/VERSION).tgz
 openssh/binfiles := \
     sbin/sshd \
     $(addprefix bin/,ssh scp ssh-add ssh-agent ssh-keygen ssh-keyscan sftp) \
-    $(addprefix libexec/,sftp-server ssh-keysign)
+    $(addprefix libexec/,sftp-server ssh-keysign sshd-session)
 
 openssh/conffiles := etc/sshd_config
 openssh/emptydir := var/empty
