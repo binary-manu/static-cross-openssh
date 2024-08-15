@@ -11,7 +11,7 @@ jobs:
       - checkout
       - run: mkdir -p artifacts
 
-      - run: make config ARCH=x86-64       PREFIX=/opt/openssh        __all__/VERSION=latest
+      - run: make config ARCH=x86-64 PREFIX=/opt/openssh __all__/VERSION=latest
       - run: make
       - run: mv output/x86-64/bin artifacts/x86-64
       - run: make clean-arch
@@ -21,7 +21,7 @@ jobs:
       - run: mv output/armv7-eabihf/bin artifacts/armv7-eabihf-android
       - run: make clean-config
 
-      - run: make config ARCH=armv7-eabihf PREFIX=/opt/openssh        __all__/VERSION=latest
+      - run: make config ARCH=armv7-eabihf PREFIX=/opt/openssh __all__/VERSION=latest
       - run: make
       - run: mv output/armv7-eabihf/bin artifacts/armv7-eabihf
       - run: make clean-arch
@@ -31,7 +31,7 @@ jobs:
       - run: mv output/aarch64/bin artifacts/aarch64-android
       - run: make clean-config
 
-      - run: make config ARCH=aarch64 PREFIX=/opt/openssh        __all__/VERSION=latest
+      - run: make config ARCH=aarch64 PREFIX=/opt/openssh __all__/VERSION=latest
       - run: make
       - run: mv output/aarch64/bin artifacts/aarch64
       - run: make clean-arch
