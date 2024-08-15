@@ -11,9 +11,16 @@ jobs:
       - checkout
       - run: mkdir -p artifacts
 
+      - run: sudo apt update && sudo apt install -y upx
+
       - run: make config ARCH=x86-64 PREFIX=/opt/openssh __all__/VERSION=latest
       - run: make
       - run: mv output/x86-64/bin artifacts/x86-64
+      - run: make clean-config
+
+      - run: make config ARCH=x86-64 PREFIX=/opt/openssh SHRINK=SHRINK_LEVEL_RUNTIME __all__/VERSION=latest
+      - run: make
+      - run: mv output/x86-64/bin artifacts/x86-64-small
       - run: make clean-arch
 
       - run: make config ARCH=armv7-eabihf PREFIX=/system/opt/openssh __all__/VERSION=latest
@@ -24,6 +31,11 @@ jobs:
       - run: make config ARCH=armv7-eabihf PREFIX=/opt/openssh __all__/VERSION=latest
       - run: make
       - run: mv output/armv7-eabihf/bin artifacts/armv7-eabihf
+      - run: make clean-config
+
+      - run: make config ARCH=armv7-eabihf PREFIX=/opt/openssh SHRINK=SHRINK_LEVEL_RUNTIME __all__/VERSION=latest
+      - run: make
+      - run: mv output/armv7-eabihf/bin artifacts/armv7-eabihf-small
       - run: make clean-arch
 
       - run: make config ARCH=aarch64 PREFIX=/system/opt/openssh __all__/VERSION=latest
@@ -34,6 +46,11 @@ jobs:
       - run: make config ARCH=aarch64 PREFIX=/opt/openssh __all__/VERSION=latest
       - run: make
       - run: mv output/aarch64/bin artifacts/aarch64
+      - run: make clean-config
+
+      - run: make config ARCH=aarch64 PREFIX=/opt/openssh SHRINK=SHRINK_LEVEL_RUNTIME __all__/VERSION=latest
+      - run: make
+      - run: mv output/aarch64/bin artifacts/aarch64-small
       - run: make clean-arch
 
       - store_artifacts:
