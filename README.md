@@ -40,7 +40,7 @@ brutally simplified form.
 To start a build, just enter the directory and run:
 
 ```bash
-make config [ARCH=<target-arch>] [PREFIX=<prefix>]
+make config [ARCH=<target-arch>] [PREFIX=<prefix>] [SHRINK=<shrinklevel>]
 ```
 
 `ARCH` is the name of an architecture for which bootlin provides a
@@ -54,6 +54,22 @@ inside the toolchain. The downloaded archive is the stable version using
 `PREFIX` is the installation prefix of the tool, that will be passed to
 configuration script (i.e. `./configure --prefix="..."`). The default is
 `/system/opt/openssh`.
+
+`SHRINK` defines a _shrink level_, which determines if the build system
+will try to make a smaller build. Currently, the following levels are
+defined:
+* `SHRINK_LEVEL_NONE`: create a regular build, without any attempt to
+  make it smaller;
+* `SHRINK_LEVEL_BUILD`: make the build smaller by applying only
+  techniques available at build time, which have no negative impact on
+  runtime performance but may reduce functionality. For example,
+  non-essential features may be left out from `openssl` and `openssh`;
+* `SHRINK_LEVEL_RUNTIME`: make an even smaller build (it includes
+  `SHRINK_LEVEL_BUILD`) by applying techniques that may have a negative
+  runtime impact. At the moment, this compresses all executables with
+  `upx`, which can reduce the disk size of files up to 70%, but each
+  time the programs are run they must decompress themselves, which means
+  longer startup times.
 
 This generates a hidden configuration file `.config`, which records the
 selected architecture, prefix path as well as the chosen versions of all
