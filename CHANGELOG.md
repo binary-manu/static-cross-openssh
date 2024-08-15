@@ -12,6 +12,14 @@ changes. For example, versions `0.2.x` are not compatible with `0.1.x`.
 
 ## [Unreleased]
 
+## [0.2.1] - 2024-08-15
+
+### Added
+
+* A new tunable `SHRINK` controls the ability to create smaller builds,
+  trading some non-essential features or runtime performance for much
+  smaller files.
+
 ## [0.2.0] - 2024-07-14
 
 ### Changed
