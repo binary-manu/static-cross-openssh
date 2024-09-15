@@ -11,7 +11,7 @@ define openssl/determine_latest
 endef
 $(call determine_version,openssl,$(openssl/DEFAULT_VERSION))
 
-openssl/TARBALL := https://www.openssl.org/source/openssl-$(openssl/VERSION).tar.gz
+openssl/TARBALL := https://github.com/openssl/openssl/releases/download/openssl-$(openssl/VERSION)/openssl-$(openssl/VERSION).tar.gz
 
 openssl/dir = $(build_dir)/openssl/openssl-$(openssl/VERSION)
 
