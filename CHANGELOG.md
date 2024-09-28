@@ -12,6 +12,12 @@ changes. For example, versions `0.2.x` are not compatible with `0.1.x`.
 
 ## [Unreleased]
 
+## [0.2.3] - 2024-09-28
+
+### Changed
+
+* Binaries are now hosted on GitHub as artifacts.
+
 ## [0.2.2] - 2024-09-15
 
 ### Fixed

@@ -1,7 +1,7 @@
 # static-cross-openssh: statically cross-compile ssh
 
-[![binary-manu](https://circleci.com/gh/binary-manu/static-cross-openssh/tree/master.svg?style=shield)](https://app.circleci.com/pipelines/github/binary-manu/static-cross-openssh?branch=master)
-_Click here to grab prebuilt binaries from CircleCI artifacts_
+[![Get the binaries](https://img.shields.io/badge/Get%20the%20binaries-8a2be2)](https://github.com/binary-manu/static-cross-openssh/actions/workflows/binaries.yaml?query=branch%3Amaster+is%3Asuccess)
+_Click here to grab prebuilt binaries from GitHub artifacts_
 
 _Warning: if you already used this project, please skim through the docs
 again, as a new major rewrite is out and some things work differently._
@@ -243,10 +243,10 @@ your device, if any):
 
 ## Prebuilt binaries
 
-Monthly builds from the latest package versions and toolchain are available via
-CircleCI. Click on the status shield at the top of the page to go to the CI
-system, select the pipeline from the month you want, and grab the binaries from
-the artifacts pane.
+Monthly builds from the latest package versions and toolchain are
+available via GitHub Actions. Click on the status shield at the top of
+the page to go to the CI system, select the pipeline from the month you
+want, and grab the binaries from the artifacts pane.
 
 Currently, we build for x86-64, ARMv7 and AArch64. ARM versions are available in
 an "Android" variant which simply uses a different installation prefix, to place
