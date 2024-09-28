@@ -1,0 +1,73 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - ci
+  schedule:
+    - cron: "0 0 15 * *"
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        config:
+          - arch: x86-64
+            config: ARCH=x86-64 PREFIX=/opt/openssh __all__/VERSION=latest
+            description: x86-64
+
+          - arch: x86-64
+            config: ARCH=x86-64 PREFIX=/opt/openssh SHRINK=SHRINK_LEVEL_RUNTIME __all__/VERSION=latest
+            description: x86-64-small
+
+          - arch: armv7-eabihf
+            config: ARCH=armv7-eabihf PREFIX=/system/opt/openssh __all__/VERSION=latest
+            description: armv7-eabihf-android
+
+          - arch: armv7-eabihf
+            config: ARCH=armv7-eabihf PREFIX=/opt/openssh __all__/VERSION=latest
+            description: armv7-eabihf
+
+          - arch: armv7-eabihf
+            config: ARCH=armv7-eabihf PREFIX=/opt/openssh SHRINK=SHRINK_LEVEL_RUNTIME __all__/VERSION=latest
+            description: armv7-eabihf-small
+
+          - arch: aarch64
+            config: ARCH=aarch64 PREFIX=/system/opt/openssh __all__/VERSION=latest
+            description: aarch64-android
+
+          - arch: aarch64
+            config: ARCH=aarch64 PREFIX=/opt/openssh __all__/VERSION=latest
+            description: aarch64
+
+          - arch: aarch64
+            config: ARCH=aarch64 PREFIX=/opt/openssh SHRINK=SHRINK_LEVEL_RUNTIME __all__/VERSION=latest
+            description: aarch64-small
+
+    env:
+      MAKEFLAGS: SHELL=/usr/bin/bash
+
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: sudo apt update && sudo apt install -y upx
+
+      - name: Get number of CPU cores
+        uses: SimenB/github-actions-cpu-cores@v2
+        id: cpu-cores
+
+      - name: Build
+        run: |
+          make config ${{ matrix.config.config }}
+          make -j${{ steps.cpu-cores.outputs.count }}
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ssh-binaries-for-${{ matrix.config.description }}
+          path: |
+            output/${{ matrix.config.arch }}/bin/
