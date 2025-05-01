@@ -243,9 +243,9 @@ your device, if any):
 
 ## Prebuilt binaries
 
-Monthly builds from the latest package versions and toolchain are
+Weekly builds from the latest package versions and toolchain are
 available via GitHub Actions. Click on the status shield at the top of
-the page to go to the CI system, select the pipeline from the month you
+the page to go to the CI system, select the pipeline from the week you
 want, and grab the binaries from the artifacts pane.
 
 Currently, we build for x86-64, ARMv7 and AArch64. ARM versions are available in
