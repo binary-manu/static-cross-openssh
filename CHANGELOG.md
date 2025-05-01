@@ -12,6 +12,14 @@ changes. For example, versions `0.2.x` are not compatible with `0.1.x`.
 
 ## [Unreleased]
 
+## [0.2.4] - 2025-05-01
+
+### Changed
+
+* Binaries are now built weekly.
+* Use Ubuntu 24.04 for CI actions.
+* Update package versions
+
 ## [0.2.3] - 2024-09-28
 
 ### Changed
