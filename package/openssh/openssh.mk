@@ -48,6 +48,9 @@ define openssh/package =
 	cd '$(staging_dir)/$(prefix)'
 	echo $(openssh/binfiles) | xargs -n1 $(host_triplet)-strip -sv
 
+	# Check that the executable is actually available
+	command -v $(firstword $(openssh/upx))
+
 	# Try compressing with UPX if enabled and available
 	# UPX bails out on SUID files, so remove the bit before and restore it after
 	$(openssh/upx) '$(openssh/upx_test_file)' && {
