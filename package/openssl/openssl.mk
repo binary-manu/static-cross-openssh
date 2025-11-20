@@ -17,7 +17,6 @@ openssl/dir = $(build_dir)/openssl/openssl-$(openssl/VERSION)
 
 ifeq "$(call shrink_level_at_least,$(SHRINK_LEVEL_BUILD))" "1"
 openssl/shrink_opts = \
-  --api=1.1.1 \
   -DOPENSSL_SMALL_FOOTPRINT \
   -Os \
   no-acvp-tests \
@@ -43,7 +42,6 @@ openssl/shrink_opts = \
   no-comp \
   no-crypto-mdebug \
   no-ct \
-  no-deprecated \
   no-des \
   no-devcryptoeng \
   no-dgram \
