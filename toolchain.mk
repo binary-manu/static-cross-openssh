@@ -2,22 +2,35 @@ include functions.mk
 
 # Default toolchain URL and version
 __toolchain__/DEFAULT_VERSION := 2024.02-1
-toolchain_url := https://toolchains.bootlin.com/downloads/releases/toolchains/$(arch)/tarballs/$(arch)--musl--stable-$(__toolchain__/DEFAULT_VERSION).tar.bz2
 
 # Determine the desired toolchain version to use.
 define __toolchain__/determine_latest
-  $(eval override __toolchain__/VERSION := $(call shell_checked,. ./version.sh; list_bootlin_versions $(arch) | sort_versions | tail -n 1))
+  $(eval override __toolchain__/VERSION := $(call shell_checked,
+    . ./version.sh;
+    list_bootlin_versions $(arch) |
+    sort_versions |
+    tail -n 1
+))
 endef
 $(call determine_version,__toolchain__,$(__toolchain__/DEFAULT_VERSION))
 
-# Update URL with the discovered version
-toolchain_url := https://toolchains.bootlin.com/downloads/releases/toolchains/$(arch)/tarballs/$(arch)--musl--stable-$(__toolchain__/VERSION).tar.bz2
+# Determine the extension of the archive
+define __toolchain__/determine_extension
+  $(eval __toolchain__/EXTENSION := $(call shell_checked,
+    . ./version.sh;
+    check_bootlin_extension $(arch) $(__toolchain__/VERSION)
+  ))
+endef
+$(call __toolchain__/determine_extension)
+
+# Update URL with the discovered version and extension
+toolchain_url := https://toolchains.bootlin.com/downloads/releases/toolchains/$(arch)/tarballs/$(arch)--musl--stable-$(__toolchain__/VERSION).tar.$(__toolchain__/EXTENSION)
 
 # Update paths to be more confortable
 dl_dir    := $(dl_dir)/__toolchain__/$(__toolchain__/VERSION)
 build_dir := $(build_dir)/__toolchain__/$(__toolchain__/VERSION)
 state_dir := $(state_dir)/__toolchain__/$(__toolchain__/VERSION)
-toolchain_file := __toolchain__-$(arch)-$(__toolchain__/VERSION).tar.bz2
+toolchain_file := __toolchain__-$(arch)-$(__toolchain__/VERSION).tar.$(__toolchain__/EXTENSION)
 
 .PHONY: all config
 .SHELLFLAGS = -e -c
