@@ -3,6 +3,7 @@ define openssh/determine_latest
   $(eval override openssh/VERSION := $(call shell_checked,
     . ./version.sh;
 	list_github_tags https://github.com/openssh/openssh-portable |
+	sed -En 's/^V_.*$$/&/p' |
 	sort_versions | tail -n 1
   ))
 endef
