@@ -155,6 +155,7 @@ On the host, you'll need:
 * GNU tar
 * GNU sed
 * GNU make
+* GNU awk
 * GNU autotools (for autoreconf)
 * curl
 * Whatever shell is used for `/bin/sh`, it must support the `pipefail`

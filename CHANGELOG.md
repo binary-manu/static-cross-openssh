@@ -12,6 +12,17 @@ changes. For example, versions `0.2.x` are not compatible with `0.1.x`.
 
 ## [Unreleased]
 
+## [0.2.5] - 2025-11-22
+
+### Added
+
+* Also copy `sshd-auth` for OpenSSH 10+.
+
+### Fixed
+
+* Fix latest versions of OpenSSH (10+) and the toolchain (2025+) not
+  being listed when asking for latest versions.
+
 ## [0.2.4] - 2025-05-01
 
 ### Changed
