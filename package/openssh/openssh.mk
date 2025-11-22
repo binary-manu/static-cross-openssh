@@ -9,6 +9,11 @@ define openssh/determine_latest
 endef
 $(call determine_version,openssh,$(openssh/DEFAULT_VERSION))
 
+openssh/major_version := $(call shell_checked,printf %s '$(openssh/VERSION)' | sed -E 's/^V_([[:digit:]]+).*$$/\1/')
+ifeq "$(openssh/major_version)" ""
+  $(error Unable to parse major from OpenSSH version)
+endif
+
 openssh/TARBALL := https://github.com/openssh/openssh-portable/archive/refs/tags/$(openssh/VERSION).tar.gz
 openssh/DEPENDS := zlib openssl
 
@@ -22,6 +27,11 @@ openssh/binfiles := \
 openssh/conffiles := etc/sshd_config
 openssh/emptydir := var/empty
 
+# Extra files added in specific versions
+ifeq "$(call greater_equal,$(openssh/major_version),10)" "1"
+  openssh/binfiles += \
+    $(addprefix libexec/,sshd-auth)
+endif
 
 ifeq "$(call shrink_level_at_least,$(SHRINK_LEVEL_RUNTIME))" "1"
   openssh/upx := upx --best --lzma -q

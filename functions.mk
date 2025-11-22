@@ -40,3 +40,6 @@ SHRINK_LEVEL_RUNTIME := 20
 
 # Will output "1" if the current shrink level is >= the argument, "" otherwise.
 shrink_level_at_least = $(shell [ "$($(shrink))" -ge "$1" ] && echo 1)
+
+# $1 >= $2
+greater_equal = $(shell [ "$1" -ge "$2" ] && echo 1)
