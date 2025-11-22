@@ -63,8 +63,8 @@ jobs:
 
       - name: Build
         run: |
-          make config ${{ matrix.config.config }}
-          make -j${{ steps.cpu-cores.outputs.count }}
+          make -Orecurse config ${{ matrix.config.config }}
+          make -Orecurse -j${{ steps.cpu-cores.outputs.count }}
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
