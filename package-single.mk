@@ -25,7 +25,7 @@ define downloadpkg =
 	mkdir -p '$(dl_dir)'
 	cd '$(dl_dir)'
 	if [ -n '$($1/TARBALL)' ]; then
-	  curl -fL '$($1/TARBALL)' -o '$(dl_dir)/$(notdir $($1/TARBALL))'
+	  curl -fvL '$($1/TARBALL)' -o '$(dl_dir)/$(notdir $($1/TARBALL))'
 	fi
 endef
 
