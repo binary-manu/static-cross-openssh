@@ -158,6 +158,7 @@ On the host, you'll need:
 * GNU awk
 * GNU autotools (for autoreconf)
 * curl
+* unzip
 * Whatever shell is used for `/bin/sh`, it must support the `pipefail`
   option. Otherwise, see [troubleshooting](#troubleshooting) for a
   workaround.

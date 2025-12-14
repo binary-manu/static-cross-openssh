@@ -34,7 +34,8 @@ define preparepkg =
 	mkdir -p '$(build_dir)/$1'
 	cd '$(build_dir)/$1'
 	if [ -n '$($1/TARBALL)' ]; then
-	  tar -xf '$(dl_dir)/$(notdir $($1/TARBALL))'
+	  tar -xf '$(dl_dir)/$(notdir $($1/TARBALL))' ||
+	    unzip '$(dl_dir)/$(notdir $($1/TARBALL))'
 	fi
 	$(call depfile,$1,prepare)
 endef

@@ -9,7 +9,7 @@ define zlib/determine_latest
 endef
 $(call determine_version,zlib,$(zlib/DEFAULT_VERSION))
 
-zlib/TARBALL := https://zlib.net/zlib-$(zlib/VERSION).tar.gz
+zlib/TARBALL := https://github.com/madler/zlib/archive/refs/tags/v$(zlib/VERSION).zip
 
 zlib/dir = $(build_dir)/zlib/zlib-$(zlib/VERSION)
 
