@@ -1,3 +1,18 @@
+<hr>
+
+**Please take a moment to read this!**
+
+⚠️ This repo is being migrated to https://codeberg.org/binary-manu/static-cross-openssh ⚠️
+
+For people interested mainly in prebuilt binaries, they will be kept available at both forges for now, but
+I strongly encourage people to grab them from [the new weekly release at Codeberg](https://codeberg.org/binary-manu/static-cross-openssh/releases/tag/weekly)
+and report any issues there. This GitHub repo is going to be sunset by the end of April 2026.
+
+To avoid overloading the smaller Codeberg infrastructure, only the latest weekly release will be available.
+Pipelines now run on a self-hosted Concourse node.
+
+<hr>
+
 # static-cross-openssh: statically cross-compile ssh
 
 [![Get the binaries](https://img.shields.io/badge/Get%20the%20binaries-8a2be2)](https://github.com/binary-manu/static-cross-openssh/actions/workflows/binaries.yaml?query=branch%3Amaster+is%3Asuccess)
