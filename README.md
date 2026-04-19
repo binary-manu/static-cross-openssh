@@ -1,12 +1,17 @@
+⚠️ **Migrated to https://codeberg.org/binary-manu/static-cross-openssh** ⚠️
+
 <hr>
 
+  
 **Please take a moment to read this!**
 
 ⚠️ This repo is being migrated to https://codeberg.org/binary-manu/static-cross-openssh ⚠️
 
+<s>
 For people interested mainly in prebuilt binaries, they will be kept available at both forges for now, but
 I strongly encourage people to grab them from [the new weekly release at Codeberg](https://codeberg.org/binary-manu/static-cross-openssh/releases/tag/weekly)
 and report any issues there. This GitHub repo is going to be sunset by the end of April 2026.
+</s>
 
 To avoid overloading the smaller Codeberg infrastructure, only the latest weekly release will be available.
 Pipelines now run on a self-hosted Concourse node.
